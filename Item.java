@@ -22,9 +22,17 @@ class Item extends Tools {
     {
         return itemName+" Power: "+damage+" Speed: "+speed+" durability: "+dur;
     }
-    public int useWeapon()
+    public int useItem()
     {
-        if(dur>0)
+        if(isHeal && dur>0)
+        {
+                sPrintln("You heal "+damage+" damage");
+                dur--;
+                sPrintln(itemName+" just lost one durability\ndurability left: "+dur);
+                return damage;
+
+        }
+        else if (dur>0)
         {
             int hit=damage*(random(2,4)/3);
             sPrintln("You deal "+hit+" damage");
@@ -34,23 +42,9 @@ class Item extends Tools {
         }
         else
         {
-           sPrintln("Cant use Weapon no durability");
+           sPrintln("Cant use this Item no durability");
             return 0;
         }
     }
-    public int useHealing()
-    {
-        if(dur>0)
-        {
-            sPrintln("You heal "+damage+" damage");
-            dur--;
-            sPrintln(itemName+" just lost one durability\ndurability left: "+dur);
-            return damage;
-        }
-        else
-        {
-           sPrintln("Cant use Weapon no durability");
-            return 0;
-        }
-    }
+
 }
