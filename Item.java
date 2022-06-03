@@ -1,12 +1,11 @@
 class Item extends Tools {
-    int damage, speed, dur;
+    int damage, dur;
     String itemName;
     boolean isHeal;
-    public Item(String name,int power, int move, int dura)
+    public Item(String name,int power, int dura)
     {
         itemName = name;
         damage = power; 
-        speed = move;
         dur = dura;
         isHeal = false;
     }
@@ -14,13 +13,18 @@ class Item extends Tools {
     {
         itemName = name;
         damage = power;
-        dur=0;
+        dur=1;
         isHeal = true;
         
     }
     public String toString()
     {
-        return itemName+" Power: "+damage+" Speed: "+speed+" durability: "+dur;
+        if(isHeal)
+        {
+              return itemName+" Healing: "+damage;
+        }
+        return itemName+" Power: "+damage+" durability: "+dur;   
+        
     }
     public int useItem()
     {
@@ -28,7 +32,6 @@ class Item extends Tools {
         {
                 sPrintln("You heal "+damage+" damage");
                 dur--;
-                sPrintln(itemName+" just lost one durability\ndurability left: "+dur);
                 return damage;
 
         }
