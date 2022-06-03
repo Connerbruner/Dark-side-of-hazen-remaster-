@@ -1,7 +1,7 @@
 class Game extends Tools {
     
     //items in loot tables
-    //non healing
+    //non-healing
     ItemClass staplers = new ItemClass("staplers",5,10,50,100);
     ItemClass clean = new ItemClass("Cleaner",3,5,100,200);
     ItemClass ruler = new ItemClass("ruler",5,10,3,5);
@@ -61,12 +61,13 @@ class Game extends Tools {
         hallwayD200.setNeighbors(neighborD200);
         hallwayD100.setNeighbors(neighborD100);
         hallway200.setNeighbors(neighbor200);
+        hallway100.setNeighbors(neighbor100);
         hallway500.setNeighbors(neighbor500);
         hallway700.setNeighbors(neighbor700);
         swim.setNeighbors(neighborSwim);
         robotics.setNeighbors(neighborRobot);
         courtYard.setNeighbors(neighborCourt);
-        for(int turn=1; true; turn++)
+        for(int turn=1; HP>0; turn++)
         {
             System.out.print(SCREEN_CLEAR);
             sPrint("Turn "+turn);
@@ -92,7 +93,7 @@ class Game extends Tools {
                 current = current.move();
             }
             gordy.move();
-            if(gordy.hallway.hallwayName==current.hallwayName)
+            if(gordy.hallway.hallwayName.equals(current.hallwayName))
             {
                 HP-= gordy.Attack();
             }
@@ -133,7 +134,7 @@ class Game extends Tools {
                    backpack[i]=null;
                }
             }
-            else if(gordy.hallway.hallwayName==current.hallwayName) {
+            else if(gordy.hallway.hallwayName.equals(current.hallwayName)) {
                 gordy.HP-=backpack[i].useItem();
             }
         }
