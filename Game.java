@@ -47,6 +47,7 @@ class Game extends Tools {
     Hallway[] neighborSwim={hallway500,hallwayD200};
     Hallway[] neighborRobot={hallway700};
     Hallway[] neighborCourt={hallway100,hallway700};
+    Gordy gordy = new Gordy(hallway700,100,3);
 
     //you
     Hallway current = commons;
@@ -84,11 +85,16 @@ class Game extends Tools {
             }
             if(action1==2 || action2==2)
             {
-                
+                useItem();
             }
             if(action1==3 || action2==3)
             {
                 current = current.move();
+            }
+            gordy.move();
+            if(gordy.hallway.hallwayName==current.hallwayName)
+            {
+                HP-= gordy.Attack();
             }
                 
         }
@@ -127,8 +133,8 @@ class Game extends Tools {
                    backpack[i]=null;
                }
             }
-            else if() {
-                
+            else if(gordy.hallway.hallwayName==current.hallwayName) {
+                gordy.HP-=backpack[i].useItem();
             }
         }
         else
