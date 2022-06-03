@@ -15,22 +15,22 @@ class Gordy extends Tools {
         int r=4;
         if(charge)
         {
-            r = random(1,3);    
+            int max=level/5;
+            if(max>3){ max=3; }
+            r = random(1,max);
         }
-        
-        
         if(r==1)
         {
             sPrintln("DARK RUSH");
             int damage = 3*random(0,5);
-            sPrintln("Gordy deals "+damage+" damage")
+            sPrintln("Gordy deals "+damage+" damage");
             return damage;
         }
         else if(r==2)
         {
             sPrintln("DOUBLE BLADE");
             int damage = 8*random(0,2);
-            sPrintln("Gordy deals "+damage+" damage")
+            sPrintln("Gordy deals "+damage+" damage");
             return damage;
         }
         else if(r==3){
@@ -41,8 +41,14 @@ class Gordy extends Tools {
         else {
             sPrintln("FIRE BLADE OF DARKNESS");
             int damage = 2*random(5,10);
-            sPrintln("Gordy deals "+damage+" damage")
+            sPrintln("Gordy deals "+damage+" damage");
+            charge=false;
             return damage;
             }
+        return 0;
+    }
+    public void move() {
+        hallway=hallway.neighbors[random(0,hallway.neighbors.length)];
+        sPrintln("Current hallway: "+hallway.hallwayName);
     }
 }
