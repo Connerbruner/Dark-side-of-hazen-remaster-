@@ -22,6 +22,7 @@ class Game extends Tools {
     ItemClass[] metal = {water, waterBottle, chromeBook, metalPiece};
     ItemClass[] court = {water, waterBottle};
     ItemClass[] main = {soda, lunch, chip, water, waterBottle};
+    ItemClass[] outSide = {soda,chip,lunch,water,waterBottle,chromeBook};
 
 
     //Hallways
@@ -31,10 +32,17 @@ class Game extends Tools {
     Hallway hallwayD200 = new Hallway("D200s", classroom);
     Hallway hallwayD100 = new Hallway("D100s", classroom);
     Hallway hallway500 = new Hallway("500", gym);
-    Hallway swim = new Hallway("swim hallway", gym);
+    Hallway swim = new Hallway("swim hallway", gym,false);
     Hallway commons = new Hallway("Commons", main);
     Hallway courtYard = new Hallway("courtYard", court);
-    Hallway robotics = new Hallway("Robotics Room", metal);
+    Hallway robotics = new Hallway("Robotics Room", metal,false);
+
+    Hallway footBall = new Hallway("Football field",outSide,false);
+    Hallway track = new Hallway("Track field",outSide,false);
+    Hallway parkingLotBus = new Hallway("Parking lot (Bus)",outSide,false);
+    Hallway parkingLotSenior = new Hallway("Parking lot (Senior)",outSide,false);
+    Hallway parkingLotBack = new Hallway("Parking lot (Back)",outSide,false);
+
     //hallway[]
     Hallway[] neighborCommon = {hallwayD200, hallway100, hallway200, hallway500};
     Hallway[] neighborD200 = {commons, hallwayD100, hallway700, courtYard};
@@ -47,9 +55,14 @@ class Game extends Tools {
     Hallway[] neighborRobot = {hallway700};
     Hallway[] neighborCourt = {hallway100, hallway700};
 
-    Goal start
 
     Gordy gordy = new Gordy(hallway700, 100, 3);
+
+    Goal[] allGoals = {
+            new Goal("Get the robotics key in 200s",hallway200),
+            new Goal("Go to the robotics room",robotics),
+            new Goal("Go to the swimming hall",swim),
+    };
 
     //you
     Hallway current = commons;
@@ -80,7 +93,12 @@ class Game extends Tools {
 
             if (action1 == 1 || action2 == 1) { find(); }
             if (action1 == 2 || action2 == 2) { useItem(); }
-            if (action1 == 3 || action2 == 3) { current = current.move(); }
+            if (action1 == 3 || action2 == 3) {
+                Hallway temp = current.move();
+                if(temp!=null) {
+                    current=temp;
+                }
+            }
             gordy.move();
             if (gordy.hallway.hallwayName.equals(current.hallwayName)) { HP -= gordy.Attack(); }
 

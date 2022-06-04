@@ -2,6 +2,8 @@ class Hallway extends Tools{
     Hallway[] neighbors;
     String hallwayName;
     ItemClass[] hallwayItems;
+    boolean hallUnlocked;
+
     public void setNeighbors(Hallway[] hallway)
     {
         neighbors=hallway;
@@ -10,8 +12,14 @@ class Hallway extends Tools{
     {
         hallwayName=name;
         hallwayItems=items;
+        hallUnlocked=true;
     }
-
+    public Hallway(String name,ItemClass[] items,boolean unlocked)
+    {
+        hallwayName=name;
+        hallwayItems=items;
+        hallUnlocked=unlocked;
+    }
     public Item loot()
     {
         return hallwayItems[random(0,hallwayItems.length-1)].createRandomItem();
@@ -21,9 +29,17 @@ class Hallway extends Tools{
         sPrint("Current hallway: "+hallwayName);
         for(int i=0; i<neighbors.length; i++)
         {
-            sPrint(i+": "+neighbors[i].hallwayName);
+            if(neighbors[i].hallUnlocked)
+            {
+                sPrint(i+": "+neighbors[i].hallwayName);
+            }
         }
         sPrint("Where would you like to go 0-"+(neighbors.length-1));
-        return neighbors[scanner.nextInt()];
+        Hallway chose = neighbors[scanner.nextInt()];
+        if( chose.hallUnlocked )
+        {
+            return chose;
+        }
+        return null;
     }
 }
