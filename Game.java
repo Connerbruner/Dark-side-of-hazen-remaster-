@@ -47,6 +47,8 @@ class Game extends Tools {
     Hallway[] neighborRobot = {hallway700};
     Hallway[] neighborCourt = {hallway100, hallway700};
 
+    Goal start
+
     Gordy gordy = new Gordy(hallway700, 100, 3);
 
     //you
