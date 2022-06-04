@@ -18,7 +18,7 @@ class Game extends Tools {
 
     //Item-class array
     ItemClass[] classroom = {water,waterBottle,clean,ruler,binder,scissors,chromeBook,staplers};
-    ItemClass[] gym = {water,waterBottle,binder,scissors,chromeBook};
+    ItemClass[] gym = {water,waterBottle,chromeBook};
     ItemClass[] metal = {water,waterBottle,chromeBook,metalPiece};
     ItemClass[] court = {water,waterBottle};
     ItemClass[] main = {soda,lunch,chip,water,waterBottle};
@@ -47,6 +47,7 @@ class Game extends Tools {
     Hallway[] neighborSwim={hallway500,hallwayD200};
     Hallway[] neighborRobot={hallway700};
     Hallway[] neighborCourt={hallway100,hallway700};
+    
     Gordy gordy = new Gordy(hallway700,100,3);
 
     //you
@@ -67,7 +68,7 @@ class Game extends Tools {
         swim.setNeighbors(neighborSwim);
         robotics.setNeighbors(neighborRobot);
         courtYard.setNeighbors(neighborCourt);
-        for(int turn=1; HP>0; turn++)
+        for(int turn=1; HP>0 && gordy.HP>0; turn++)
         {
             System.out.print(SCREEN_CLEAR);
             sPrint("Turn "+turn);
@@ -75,6 +76,7 @@ class Game extends Tools {
             sPrint("1) loot\n2) use item\n3) move");
             int action1=scanner.nextInt();
             int action2=scanner.nextInt();
+            scanner.nextLine();
             while(action2==action1)
             {
                 action2=scanner.nextInt();
@@ -115,15 +117,20 @@ class Game extends Tools {
     }
     public String packToString()
     {
-        return "Current items\nSlot 0: "+backpack[0]+"\nSlot 1: "+backpack[1]+"\nSlot 2: "+backpack[2];
+        return "Current items\nSlot 0: "+backpack[0]+"\nSlot 1: "+backpack[1]+"\nStorage: "+backpack[2]+"\n";
     }
     
     public void useItem()
     {
         sPrint(packToString());
-        sPrint("What slot 0-2");
-        int i = scanner.nextInt();
+        sPrint("What slot 0-1");
+        int i=3;
+        while(i==3)
+        {
+            i = scanner.nextInt();            
+        }
         Item use = backpack[i];
+        scanner.nextLine();
         if(use!=null)
         {
             if(use.isHeal)
@@ -131,6 +138,10 @@ class Game extends Tools {
                if(HP!=HPM)
                {
                    HP+=use.useItem();
+                   if(HP>HPM)
+                   {
+                       HP=HPM;
+                   }
                    backpack[i]=null;
                }
             }
@@ -142,6 +153,22 @@ class Game extends Tools {
         {
             sPrint("No item to use");
         }
+        if(backpack[0]==null && backpack[2]!=null)
+            {
+                if(choice("Pull out "+backpack[2].itemName+" of storage"))
+                {
+                    backpack[0]=backpack[2];
+                    backpack[2]=null;
+                }
+            }
+            if(backpack[1]==null && backpack[2]!=null)
+            {
+                if(choice("Pull out "+backpack[2].itemName+" of storage"))
+                {
+                    backpack[1]=backpack[2];
+                    backpack[2]=null;
+                }
+            }
 
     }
     

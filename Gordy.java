@@ -48,7 +48,7 @@ class Gordy extends Tools {
         return 0;
     }
     public void move() {
-        hallway=hallway.neighbors[random(0,hallway.neighbors.length)];
-        sPrintln("Current hallway: "+hallway.hallwayName);
+        hallway=hallway.neighbors[random(0,hallway.neighbors.length-1)];
+        sPrintln("Gordy is in the "+hallway.hallwayName);
     }
 }
