@@ -10,20 +10,26 @@ class Game extends Tools {
     ItemClass waterBottle = new ItemClass("Water Bottle (attack)", 1, 20, 2, 12);
     ItemClass chromeBook = new ItemClass("chromeBook", 10, 20, 1, 2);
     ItemClass metalPiece = new ItemClass("metalPiece", 1, 20, 1, 50);
-    ItemClass  = new ItemClass("",,,,);
+    ItemClass basketBall = new ItemClass("basketBall",10,20,1,5);
+    ItemClass footBall = new ItemClass("FootBall",5,10,3,7);
+    ItemClass tennisBall = new ItemClass("tennisBall",1,5,8,20);
     //healing
     ItemClass soda = new ItemClass("Soda", 5, 10);
     ItemClass chip = new ItemClass("Chip bag", 7, 12);
     ItemClass water = new ItemClass("Water bottle (heal)", 6, 10);
     ItemClass lunch = new ItemClass("School lunch", 1, 20);
+    //Armor
+    ItemClass cardBoard = new ItemClass("Big cardBoard box",5);
+    ItemClass metalPanel = new ItemClass("Metal shield",10);
+    ItemClass paper = new ItemClass("Poster paper",1);
 
     //Item-class array
-    ItemClass[] classroom = {water, waterBottle, clean, ruler, binder, scissors, chromeBook, staplers};
+    ItemClass[] classroom = {water, waterBottle, clean, ruler, binder, scissors, chromeBook, staplers,paper};
     ItemClass[] gym = {water, waterBottle, chromeBook};
-    ItemClass[] metal = {water, waterBottle, chromeBook, metalPiece};
+    ItemClass[] metal = {water, waterBottle, chromeBook, metalPiece,metalPanel};
     ItemClass[] court = {water, waterBottle};
-    ItemClass[] main = {soda, lunch, chip, water, waterBottle};
-    ItemClass[] outSide = {soda, chip, lunch, water, waterBottle, chromeBook};
+    ItemClass[] main = {soda, lunch, chip, water, waterBottle,cardBoard,paper};
+    ItemClass[] outSide = {soda, chip, lunch, water, waterBottle, chromeBook,basketBall,footBall,tennisBall,cardBoard};
 
 
     //Hallways
@@ -38,7 +44,7 @@ class Game extends Tools {
     Hallway courtYard = new Hallway("courtYard", court);
     Hallway robotics = new Hallway("Robotics Room", metal, false);
 
-    Hallway footBall = new Hallway("Football field", outSide, false);
+    Hallway field = new Hallway("Football field", outSide, false);
     Hallway track = new Hallway("Track field", outSide, false);
     Hallway parkingLotBus = new Hallway("Parking lot (Bus)", outSide, false);
     Hallway parkingLotSenior = new Hallway("Parking lot (Senior)", outSide, false);
@@ -57,12 +63,12 @@ class Game extends Tools {
     Hallway[] neighborCourt = {hallway100, hallway700, parkingLotSenior};
 
     Hallway[] neighborFootBall = {parkingLotBack};
-    Hallway[] neighborBack = {footBall, track, parkingLotSenior};
+    Hallway[] neighborBack = {field, track, parkingLotSenior};
     Hallway[] neighborSenior = {parkingLotBack, parkingLotBus, hallway100, commons};
     Hallway[] neighborBus = {hallway500, track, parkingLotSenior};
     Hallway[] neighborTrack = {parkingLotBack, parkingLotBus};
 
-    Gordy gordy = new Gordy(footBall, 100, 3);
+    Gordy gordy = new Gordy(field, 100, 3);
 
     Goal[] allGoals = {
             new Goal("Get the robotics key", hallway200),
@@ -88,7 +94,7 @@ class Game extends Tools {
         swim.setNeighbors(neighborSwim);
         robotics.setNeighbors(neighborRobot);
         courtYard.setNeighbors(neighborCourt);
-        footBall.setNeighbors(neighborFootBall);
+        field.setNeighbors(neighborFootBall);
         parkingLotBack.setNeighbors(neighborBack);
         parkingLotSenior.setNeighbors(neighborSenior);
         parkingLotBus.setNeighbors(neighborBus);
@@ -123,7 +129,29 @@ class Game extends Tools {
             }
             gordy.move();
             if (gordy.hallway.hallwayName.equals(current.hallwayName)) {
-                HP -= gordy.Attack();
+                if(backpack[0].isShield)
+                {
+                    int place = gordy.Attack(backpack[0].dur);
+                    if(place<0)
+                    {
+                        backpack[0].dur-=Math.abs(place);
+                    }
+                    else {
+                        backpack[0]=null;
+                    }
+                } else if (backpack[1].isShield) {
+                    int place = gordy.Attack(backpack[1].dur);
+                    if(place<0)
+                    {
+                        backpack[1].dur-=Math.abs(place);
+                    }
+                    else {
+                        backpack[1]=null;
+                    }
+                }
+                else {
+                    HP -= gordy.Attack(0);
+                }
             }
             if (allGoals[story].check(current))
             {
@@ -140,7 +168,7 @@ class Game extends Tools {
             if(story>2)
             {
                 track.hallUnlocked=true;
-                footBall.hallUnlocked=true;
+                field.hallUnlocked=true;
                 parkingLotBus.hallUnlocked=true;
                 parkingLotSenior.hallUnlocked=true;
                 parkingLotBack.hallUnlocked=true;

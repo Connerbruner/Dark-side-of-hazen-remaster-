@@ -1,13 +1,13 @@
 class Item extends Tools {
     int damage, dur;
     String itemName;
-    boolean isHeal;
+    boolean isHeal = false;
+    boolean isShield;
     public Item(String name,int power, int dura)
     {
         itemName = name;
         damage = power; 
         dur = dura;
-        isHeal = false;
     }
     public Item(String name,int power)
     {
@@ -15,13 +15,22 @@ class Item extends Tools {
         damage = power;
         dur=1;
         isHeal = true;
-        
+    }
+    public Item(String name,int power,double per)
+    {
+        itemName = name;
+        dur=power;
+        isShield = true;
     }
     public String toString()
     {
         if(isHeal)
         {
               return itemName+" Healing: "+damage;
+        }
+        if(isShield)
+        {
+            return  itemName+" Amount blockable: "+dur;
         }
         return itemName+" Power: "+damage+" durability: "+dur;   
         
