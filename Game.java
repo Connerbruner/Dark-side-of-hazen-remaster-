@@ -22,7 +22,7 @@ class Game extends Tools {
     ItemClass[] metal = {water, waterBottle, chromeBook, metalPiece};
     ItemClass[] court = {water, waterBottle};
     ItemClass[] main = {soda, lunch, chip, water, waterBottle};
-    ItemClass[] outSide = {soda,chip,lunch,water,waterBottle,chromeBook};
+    ItemClass[] outSide = {soda, chip, lunch, water, waterBottle, chromeBook};
 
 
     //Hallways
@@ -32,36 +32,41 @@ class Game extends Tools {
     Hallway hallwayD200 = new Hallway("D200s", classroom);
     Hallway hallwayD100 = new Hallway("D100s", classroom);
     Hallway hallway500 = new Hallway("500", gym);
-    Hallway swim = new Hallway("swim hallway", gym,false);
+    Hallway swim = new Hallway("swim hallway", gym, false);
     Hallway commons = new Hallway("Commons", main);
     Hallway courtYard = new Hallway("courtYard", court);
-    Hallway robotics = new Hallway("Robotics Room", metal,false);
+    Hallway robotics = new Hallway("Robotics Room", metal, false);
 
-    Hallway footBall = new Hallway("Football field",outSide,false);
-    Hallway track = new Hallway("Track field",outSide,false);
-    Hallway parkingLotBus = new Hallway("Parking lot (Bus)",outSide,false);
-    Hallway parkingLotSenior = new Hallway("Parking lot (Senior)",outSide,false);
-    Hallway parkingLotBack = new Hallway("Parking lot (Back)",outSide,false);
+    Hallway footBall = new Hallway("Football field", outSide, false);
+    Hallway track = new Hallway("Track field", outSide, false);
+    Hallway parkingLotBus = new Hallway("Parking lot (Bus)", outSide, false);
+    Hallway parkingLotSenior = new Hallway("Parking lot (Senior)", outSide, false);
+    Hallway parkingLotBack = new Hallway("Parking lot (Back)", outSide, false);
 
     //hallway[]
-    Hallway[] neighborCommon = {hallwayD200, hallway100, hallway200, hallway500};
+    Hallway[] neighborCommon = {hallwayD200, hallway100, hallway200, hallway500, parkingLotSenior};
     Hallway[] neighborD200 = {commons, hallwayD100, hallway700, courtYard};
     Hallway[] neighborD100 = {hallwayD200, hallway200};
-    Hallway[] neighbor200 = {hallway100, commons, hallwayD200};
-    Hallway[] neighbor100 = {courtYard, hallway200, commons};
-    Hallway[] neighbor500 = {swim, commons};
-    Hallway[] neighbor700 = {courtYard, hallwayD200, robotics};
-    Hallway[] neighborSwim = {hallway500, hallwayD200};
+    Hallway[] neighbor200 = {hallway100, commons, hallwayD200, parkingLotBack};
+    Hallway[] neighbor100 = {courtYard, hallway200, commons, parkingLotSenior};
+    Hallway[] neighbor500 = {swim, commons, parkingLotBus};
+    Hallway[] neighbor700 = {courtYard, hallwayD200, robotics, parkingLotBack};
+    Hallway[] neighborSwim = {hallway500, hallwayD200, parkingLotBus};
     Hallway[] neighborRobot = {hallway700};
-    Hallway[] neighborCourt = {hallway100, hallway700};
+    Hallway[] neighborCourt = {hallway100, hallway700, parkingLotSenior};
 
+    Hallway[] neighborFootBall = {parkingLotBack};
+    Hallway[] neighborBack = {footBall, track, parkingLotSenior};
+    Hallway[] neighborSenior = {parkingLotBack, parkingLotBus, hallway100, commons};
+    Hallway[] neighborBus = {hallway500, track, parkingLotSenior};
+    Hallway[] neighborTrack = {parkingLotBack, parkingLotBus};
 
     Gordy gordy = new Gordy(hallway700, 100, 3);
 
     Goal[] allGoals = {
-            new Goal("Get the robotics key in 200s",hallway200),
-            new Goal("Go to the robotics room",robotics),
-            new Goal("Go to the swimming hall",swim),
+            new Goal("Get the robotics key in 200s", hallway200),
+            new Goal("Go to the robotics room and ", robotics),
+            new Goal("Go to the swimming hall and exit the building", swim),
     };
 
     //you
@@ -81,6 +86,11 @@ class Game extends Tools {
         swim.setNeighbors(neighborSwim);
         robotics.setNeighbors(neighborRobot);
         courtYard.setNeighbors(neighborCourt);
+        footBall.setNeighbors(neighborFootBall);
+        parkingLotBack.setNeighbors(neighborBack);
+        parkingLotSenior.setNeighbors(neighborSenior);
+        parkingLotBus.setNeighbors(neighborBus);
+        track.setNeighbors(neighborTrack);
         for (int turn = 1; HP > 0 && gordy.HP > 0; turn++) {
             System.out.print(SCREEN_CLEAR);
             sPrint("Turn " + turn);
@@ -89,18 +99,45 @@ class Game extends Tools {
             int action1 = scanner.nextInt();
             int action2 = scanner.nextInt();
             scanner.nextLine();
-            while (action2 == action1) { action2 = scanner.nextInt(); }
+            while (action2 == action1) {
+                action2 = scanner.nextInt();
+            }
 
-            if (action1 == 1 || action2 == 1) { find(); }
-            if (action1 == 2 || action2 == 2) { useItem(); }
+            if (action1 == 1 || action2 == 1) {
+                find();
+            }
+            if (action1 == 2 || action2 == 2) {
+                useItem();
+            }
             if (action1 == 3 || action2 == 3) {
                 Hallway temp = current.move();
-                if(temp!=null) {
-                    current=temp;
+                if (temp != null) {
+                    current = temp;
                 }
             }
             gordy.move();
-            if (gordy.hallway.hallwayName.equals(current.hallwayName)) { HP -= gordy.Attack(); }
+            if (gordy.hallway.hallwayName.equals(current.hallwayName)) {
+                HP -= gordy.Attack();
+            }
+            int i;
+            for(i=0; allGoals[i]==null; i++);
+            allGoals[i].check(current);
+            if(i>0)
+            {
+                robotics.hallUnlocked=true;
+            }
+            if(i>1)
+            {
+                swim.hallUnlocked=true;
+            }
+            if(i>2)
+            {
+                track.hallUnlocked=true;
+                footBall.hallUnlocked=true;
+                parkingLotBus.hallUnlocked=true;
+                parkingLotSenior.hallUnlocked=true;
+                parkingLotBack.hallUnlocked=true;
+            }
 
         }
     }
@@ -125,20 +162,26 @@ class Game extends Tools {
         sPrint(packToString());
         sPrint("What slot 0-1");
         int i = 3;
-        while (i == 3) { i = scanner.nextInt(); }
+        while (i == 3) {
+            i = scanner.nextInt();
+        }
         Item use = backpack[i];
         scanner.nextLine();
         if (use != null) {
             if (use.isHeal) {
                 if (HP != HPM) {
                     HP += use.useItem();
-                    if (HP > HPM) { HP = HPM; }
+                    if (HP > HPM) {
+                        HP = HPM;
+                    }
                     backpack[i] = null;
                 }
             } else if (gordy.hallway.hallwayName.equals(current.hallwayName)) {
                 gordy.HP -= backpack[i].useItem();
             }
-        } else { sPrint("No item to use"); }
+        } else {
+            sPrint("No item to use");
+        }
         if (backpack[0] == null && backpack[2] != null) {
             if (choice("Pull out " + backpack[2].itemName + " of storage")) {
                 backpack[0] = backpack[2];

@@ -19,11 +19,13 @@ class Goal extends Tools {
     {
         return "Current Goal: "+goal+" go to "+ending.hallwayName+" reward: "+reward.toString();
     }
-    public void check(Hallway hallway)
+    public boolean check(Hallway hallway)
     {
-        if(hallway.hallwayName.equals(ending.hallwayName))
+        if(hallway.hallwayName.equals(ending.hallwayName) && !complete)
         {
             complete=true;
+            return true;
         }
+        return false;
     }
 }
