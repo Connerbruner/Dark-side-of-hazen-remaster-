@@ -10,6 +10,7 @@ class Game extends Tools {
     ItemClass waterBottle = new ItemClass("Water Bottle (attack)", 1, 20, 2, 12);
     ItemClass chromeBook = new ItemClass("chromeBook", 10, 20, 1, 2);
     ItemClass metalPiece = new ItemClass("metalPiece", 1, 20, 1, 50);
+    ItemClass  = new ItemClass("",,,,);
     //healing
     ItemClass soda = new ItemClass("Soda", 5, 10);
     ItemClass chip = new ItemClass("Chip bag", 7, 12);
@@ -61,12 +62,12 @@ class Game extends Tools {
     Hallway[] neighborBus = {hallway500, track, parkingLotSenior};
     Hallway[] neighborTrack = {parkingLotBack, parkingLotBus};
 
-    Gordy gordy = new Gordy(hallway700, 100, 3);
+    Gordy gordy = new Gordy(footBall, 100, 3);
 
     Goal[] allGoals = {
-            new Goal("Get the robotics key in 200s", hallway200),
-            new Goal("Go to the robotics room and ", robotics),
-            new Goal("Go to the swimming hall and exit the building", swim),
+            new Goal("Get the robotics key", hallway200),
+            new Goal("Find Tippy", robotics),
+            new Goal("exit the building", swim),
     };
 
     //you
@@ -74,7 +75,8 @@ class Game extends Tools {
     Item[] backpack = new Item[3];
     int HP = 50;
     int HPM = 50;
-
+    int story=0;
+    
     public void game() {
         commons.setNeighbors(neighborCommon);
         hallwayD200.setNeighbors(neighborD200);
@@ -93,7 +95,9 @@ class Game extends Tools {
         track.setNeighbors(neighborTrack);
         for (int turn = 1; HP > 0 && gordy.HP > 0; turn++) {
             System.out.print(SCREEN_CLEAR);
-            sPrint("Turn " + turn);
+            sPrintln("Turn " + turn);
+            sPrint(allGoals[story].toString());
+            System.out.println();
             sPrint("What would you like to do? (pick 2 different ones)");
             sPrint("1) loot\n2) use item\n3) move");
             int action1 = scanner.nextInt();
@@ -102,6 +106,7 @@ class Game extends Tools {
             while (action2 == action1) {
                 action2 = scanner.nextInt();
             }
+            System.out.println();
 
             if (action1 == 1 || action2 == 1) {
                 find();
@@ -114,43 +119,44 @@ class Game extends Tools {
                 if (temp != null) {
                     current = temp;
                 }
+                sPrintln("You are in the "+current.hallwayName);
             }
             gordy.move();
             if (gordy.hallway.hallwayName.equals(current.hallwayName)) {
                 HP -= gordy.Attack();
             }
-            int i;
-            for(i=0; allGoals[i]==null; i++);
-            allGoals[i].check(current);
-            if(i>0)
+            if (allGoals[story].check(current))
+            {
+            if(story>0)
             {
                 robotics.hallUnlocked=true;
+                story++;
             }
-            if(i>1)
+            if(story>1)
             {
                 swim.hallUnlocked=true;
+                story++;
             }
-            if(i>2)
+            if(story>2)
             {
                 track.hallUnlocked=true;
                 footBall.hallUnlocked=true;
                 parkingLotBus.hallUnlocked=true;
                 parkingLotSenior.hallUnlocked=true;
                 parkingLotBack.hallUnlocked=true;
+                story++;
+            }                
             }
-
-        }
+            }
     }
 
     public void find() {
         Item temp = current.loot();
         sPrint(packToString());
-        System.out.println();
         sPrint(temp.toString());
         if (choice("Want to this item")) {
             sPrint("What slot 0-2");
             backpack[scanner.nextInt()] = temp;
-
         }
     }
 

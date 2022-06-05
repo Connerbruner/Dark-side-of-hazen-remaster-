@@ -2,14 +2,8 @@ class Goal extends Tools {
 
     String goal;
     Hallway ending;
-    Item reward;
     boolean complete=false;
-    public Goal(String name,Hallway hallway,Item item)
-    {
-        goal=name;
-        ending=hallway;
-        reward=item;
-    }
+
     public Goal(String name,Hallway hallway)
     {
         goal=name;
@@ -17,12 +11,13 @@ class Goal extends Tools {
     }
     public  String toString()
     {
-        return "Current Goal: "+goal+" go to "+ending.hallwayName+" reward: "+reward.toString();
+        return "Current Goal: "+goal+" go to "+ending.hallwayName;
     }
     public boolean check(Hallway hallway)
     {
         if(hallway.hallwayName.equals(ending.hallwayName) && !complete)
         {
+            sPrintln(toString()+" COMPLETE");
             complete=true;
             return true;
         }
