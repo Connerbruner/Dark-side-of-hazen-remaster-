@@ -43,19 +43,27 @@ class Gordy extends Tools {
             }
         return 0;
     }
-    public void move() {
+    public void move(Hallway cur) {
         //moves like nomral
-        Hallway temp=hallway.neighbors[random(0,hallway.neighbors.length-1)];    
-        hallway=temp;
-        //moves foward but never back
-        temp=hallway.neighbors[random(0,hallway.neighbors.length-1)];
-        
-        while(temp.hallwayName.equals(hallway.hallwayName))
+        int i;
+        for( i=0; hallway.neighbors[i].hallwayName.equals(cur.hallwayName) && i<hallway.neighbors.length; i++);
+        if(hallway.neighbors[i].hallwayName.equals(cur.hallwayName))
         {
-            temp=hallway.neighbors[random(0,hallway.neighbors.length-1)]; 
+            hallway=hallway.neighbors[i];
         }
-        
-        hallway=temp;
+        else {
+            Hallway temp=hallway.neighbors[random(0,hallway.neighbors.length-1)];
+            hallway=temp;
+            //moves foward but never back
+            temp=hallway.neighbors[random(0,hallway.neighbors.length-1)];
+
+            while(temp.hallwayName.equals(hallway.hallwayName))
+            {
+                temp=hallway.neighbors[random(0,hallway.neighbors.length-1)];
+            }
+            hallway=temp;
+
+        }
         }
     
 
