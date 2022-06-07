@@ -36,7 +36,21 @@ class ItemClass extends Tools {
         {
             return new Item(itemName,damageHigh,1.0);
         }
-        return new Item(itemName, random(damageLow, damageHigh), random(durLow, durHigh));
+        int damage = random(damageLow, damageHigh);
+        int dPower = damageHigh-damage;
+        
+        int maxDur = durLow+dPower;
+        int minDur = durLow+(dPower/2);
+        
+        if(maxDur>durHigh)
+        {
+            maxDur=durHigh;
+        }
+        if(minDur>durHigh)
+        {
+            minDur=durHigh;
+        }
+        return new Item(itemName, damage, random(minDur, maxDur));
     }
 
 

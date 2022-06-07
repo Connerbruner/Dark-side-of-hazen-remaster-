@@ -11,9 +11,8 @@ class Gordy extends Tools {
     public int Attack(int block)
     {
         int r=4;
-        if(charge)
+        if(!charge)
         {
-
             r = random(1,3);
         }
         if(r==1)
@@ -45,7 +44,20 @@ class Gordy extends Tools {
         return 0;
     }
     public void move() {
-        hallway=hallway.neighbors[random(0,hallway.neighbors.length-1)];
-        sPrintln("Gordy is in the "+hallway.hallwayName);
+        //moves like nomral
+        Hallway temp=hallway.neighbors[random(0,hallway.neighbors.length-1)];    
+        hallway=temp;
+        //moves foward but never back
+        temp=hallway.neighbors[random(0,hallway.neighbors.length-1)];
+        
+        while(temp.hallwayName.equals(hallway.hallwayName))
+        {
+            temp=hallway.neighbors[random(0,hallway.neighbors.length-1)]; 
+        }
+        
+        hallway=temp;
+        }
+    
+
+        
     }
-}

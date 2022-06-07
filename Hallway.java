@@ -27,14 +27,16 @@ class Hallway extends Tools{
     public Hallway move()
     {
         sPrint("Current hallway: "+hallwayName);
+        int l=0;
         for(int i=0; i<neighbors.length; i++)
         {
             if(neighbors[i].hallUnlocked)
             {
                 sPrint(i+": "+neighbors[i].hallwayName);
+                l++;
             }
         }
-        sPrint("Where would you like to go 0-"+(neighbors.length-1));
+        sPrint("Where would you like to go 0-"+(l-1));
         Hallway chose = neighbors[scanner.nextInt()];
         if( chose.hallUnlocked )
         {
